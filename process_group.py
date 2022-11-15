@@ -13,7 +13,6 @@ def _start_process(id, n_processes, worker, master_addr, master_port):
     os.environ['MASTER_ADDR'] = master_addr
     os.environ['MASTER_PORT'] = master_port
 
-    # os.environ['GLOO_SOCKET_IFNAME'] = 'en0'
     D.init_process_group('gloo', rank=id, world_size=n_processes)
 
     worker(id, n_processes)

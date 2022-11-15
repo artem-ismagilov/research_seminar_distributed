@@ -1,27 +1,17 @@
 from process_group import Worker, DistributedRunner
-import torch
-import torch.distributed as D
-import time
 
 
-class PointToPointWorker(Worker):
+class SimpleWorker(Worker):
     def __init__(self):
         pass
 
     def __call__(self, id, n_processes):
-        if id == 0:
-            data = torch.ones(5)
-            D.send(tensor=data, dst=1)
-        else:
-            data = torch.tensor(0)
-            D.recv(tensor=data, src=0)
-
-        print(f'Process {id}: data {data}!')
+        print(f'Worker {id + 1}/{n_processes} started!')
 
 
 if __name__ == '__main__':
     def spawn_worker(id):
-        return PointToPointWorker()
+        return SimpleWorker()
 
     runner = DistributedRunner(
         n_processes=2,
