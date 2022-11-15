@@ -13,7 +13,6 @@ class PointToPointWorker(Worker):
             data = torch.ones(5)
             D.send(tensor=data, dst=1)
         else:
-            time.sleep(5)
             data = torch.zeros(5)
             D.recv(tensor=data, src=0)
 
