@@ -44,10 +44,7 @@ class TrainWorker(Worker):
 
 
 if __name__ == '__main__':
-    torch.multiprocessing.set_sharing_strategy('file_system')
-
     model = ConvNet()
-
     group_size = 6
 
     def spawn_worker(id):
