@@ -1,9 +1,11 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torchvision
+import numpy as np
 
 
-def train_epoch(model, train_loader, optimizer, step_callback):
+def train_epoch(model, train_loader, optimizer, step_callback=None):
     loss_log, acc_log = [], []
     model.train()
     for batch_num, (x_batch, y_batch) in enumerate(train_loader):
@@ -19,7 +21,8 @@ def train_epoch(model, train_loader, optimizer, step_callback):
         loss = F.nll_loss(output, target).cpu()
         loss.backward()
 
-        step_callback(model)
+        if step_callback is not None:
+            step_callback(model)
 
         optimizer.step()
 
@@ -67,3 +70,19 @@ class ConvNet(nn.Module):
 
     def forward(self, x):
         return F.log_softmax(self.classifier(self.features(x.reshape(-1, 1, 28, 28))), dim=-1)
+
+
+def prepare_data():
+    train_dataset = torchvision.datasets.MNIST(
+            root='./MNIST/',
+            train=True,
+            transform=torchvision.transforms.ToTensor(),
+            download=True)
+
+    test_dataset = torchvision.datasets.MNIST(
+            root='./MNIST/',
+            train=False,
+            transform=torchvision.transforms.ToTensor(),
+            download=True)
+
+    return train_dataset, test_dataset
